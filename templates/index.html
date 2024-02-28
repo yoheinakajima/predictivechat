@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding-top: 20px; }
+      .inputBox, .message, .response, .tempText, .tempResponse { font-size: 20px; margin-top: 10px; }
+      .inputBox { border: none; border-bottom: 2px solid gray; outline: none; width: 100%; padding: 10px 0; margin-bottom: 20px; }
+      .message { color: black; }
+      .response { color: blue; }
+      .tempResponse { color: purple; }
+      .endLikelihood { color: gray; }
+      .restofmessage { color: green; }
+    </style>
+</head>
+<body>
+
+<script>
+function createDiv(className, text = '') {
+    const div = document.createElement('div');
+    div.className = className;
+    div.textContent = text;
+    return div;
+}
+
+function addInputBox() {
+    const inputBox = document.createElement('input');
+    inputBox.className = 'inputBox';
+    document.body.appendChild(inputBox);
+    inputBox.focus();
+
+    const endLikelihoodDiv = createDiv('tempText endLikelihood');
+    const restofmessageDiv = createDiv('tempText restofmessage');
+    const tempResponseDiv = createDiv('tempText tempResponse'); // Temporary response div
+    document.body.append(endLikelihoodDiv, restofmessageDiv, tempResponseDiv);
+
+    inputBox.addEventListener('keyup', function(event) {
+        if (event.key === ' ' || event.key === '.' || event.key === '?' || event.key === '!') {
+            fetch('/process', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: inputBox.value}),
+            })
+            .then(response => response.json())
+            .then(data => handleResponse(data, inputBox, endLikelihoodDiv, restofmessageDiv, tempResponseDiv))
+            .catch(error => console.error('Error:', error));
+        }
+    });
+}
+
+function handleResponse(data, inputBox, endLikelihoodDiv, restofmessageDiv, tempResponseDiv) {
+    if (data.end_likelihood > 70) {
+        const userMessageDiv = createDiv('message', inputBox.value);
+        const finalResponseDiv = createDiv('response', data.response); // Final response for permanent display
+        document.body.replaceChild(userMessageDiv, inputBox);
+        endLikelihoodDiv.remove();
+        restofmessageDiv.remove();
+        tempResponseDiv.remove(); // Remove temporary response
+        document.body.appendChild(finalResponseDiv);
+        addInputBox(); // Add a new input box for the next message
+    } else {
+        endLikelihoodDiv.textContent = `Message completion likelihood: ${data.end_likelihood}`;
+        restofmessageDiv.textContent = `Predicted message: ${data.restofmessage}`;
+        tempResponseDiv.textContent = `AI Response: ${data.response}`; // Display temporary response
+    }
+}
+
+document.addEventListener('DOMContentLoaded', addInputBox);
+</script>
+</body>
+</html>
