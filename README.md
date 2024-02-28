@@ -1,6 +1,6 @@
 # PredictiveChat
 
-PredictiveChat is an innovative Flask application designed to showcase the power of Large Language Models (LLMs) in predicting user behavior. By integrating OpenAI's API, this project demonstrates how real-time text predictions can significantly decrease latency in chat applications, providing a smoother and more responsive user experience.
+PredictiveChat is a quick Flask prototyped designed to showcase the usage of LLMs in predicting user behavior to decrease latency.
 
 ## Goal
 
