@@ -2,6 +2,8 @@
 
 PredictiveChat is a quick Flask prototyped designed to showcase the usage of LLMs in predicting user behavior to decrease latency.
 
+[Here](https://x.com/yoheinakajima/status/1762928630366347631?s=20)'s a X/Twitter thread with a flowchart of how the code works.
+
 ## Goal
 
 The primary goal of PredictiveChat is to demonstrate an example of leveraging LLMs to predict the end of user messages. This prediction capability is used to preemptively generate responses, thereby decreasing the perceived latency in chat applications. It's an exploration into enhancing chat interfaces with AI-driven anticipatory features to make conversations feel instantaneous.
